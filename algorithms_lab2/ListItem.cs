@@ -11,6 +11,11 @@ namespace algorithms_lab2
         {
             Data = data;
         }
+        public void ClearLinks()
+        {
+            Next = null;
+            Prev = null;
+        }
     }
 }
 

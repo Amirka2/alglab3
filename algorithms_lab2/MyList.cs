@@ -141,6 +141,83 @@ namespace algorithms_lab2
             Length = 0;
         }
 
+        //методы для лабы
+        public void Reverse()
+        {
+            MyList<T> newList = new MyList<T>();
+            ListItem<T> current1 = Tail;
+            ListItem<T> current2 = new ListItem<T>(current1.Data);
+
+            while(current1 != null)
+            {
+                newList.Add(current1.Data);
+                current1 = current1.Prev;
+            }
+        }                       
+        public void LastToHead()
+        {
+            var temp = Tail;
+            temp.ClearLinks();
+
+            Tail = Tail.Prev;
+            Tail.Next = null;
+
+            temp.Next = Head;
+            Head = temp;
+        }
+        public void FirstToTail()
+        {
+            var temp = Head;
+            temp.ClearLinks();
+
+            Head = Head.Next;
+            Head.Prev = null;
+
+            temp.Prev = Tail;
+            Tail = temp;
+        }
+        public int GetUnicValuesCount()
+        {
+            var unicValues = GetUnicValues();
+
+            return unicValues.Length;
+        }
+        public void DeleteSecondRepeatedValue()
+        {
+            var unicValues = GetUnicValues();
+            var current = Head;
+
+            foreach(var el in unicValues)
+            {
+                if (current.Data.Equals(el))
+                {
+                    Remove(current.Data);
+                    unicValues.Remove(el);
+                }
+            }
+        }
+        
+
+        public MyList<T> GetUnicValues()
+        {
+            var current = Head;
+            var unicValues = new MyList<T>();
+            unicValues.Add(current.Data);
+            current = current.Next;
+
+            while (current != null)
+            {
+                foreach (var e in unicValues)
+                {
+                    if (current.Data.Equals(e))
+                        break;
+                    else
+                        unicValues.Add(current.Data);
+                }
+            }
+            return unicValues;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             ListItem<T> current = Head;
