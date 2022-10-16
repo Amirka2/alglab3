@@ -72,7 +72,6 @@ namespace algorithms_lab2
                 Head.Prev = el;
                 el.Next = Head;
             }
-            
             Head = el;
         }
         public void Remove(T data)
@@ -153,7 +152,7 @@ namespace algorithms_lab2
                 newList.Add(current1.Data);
                 current1 = current1.Prev;
             }
-        }                       
+        }                                               // 1
         public void LastToHead()
         {
             var temp = Tail;
@@ -164,7 +163,7 @@ namespace algorithms_lab2
 
             temp.Next = Head;
             Head = temp;
-        }
+        }                                            // 2
         public void FirstToTail()
         {
             var temp = Head;
@@ -175,13 +174,13 @@ namespace algorithms_lab2
 
             temp.Prev = Tail;
             Tail = temp;
-        }
+        }                                           // 2
         public int GetUnicValuesCount()
         {
             var unicValues = GetUnicValues();
 
             return unicValues.Length;
-        }
+        }                                     // 3
         public void DeleteSecondRepeatedValue()
         {
             var unicValues = GetUnicValues();
@@ -195,8 +194,155 @@ namespace algorithms_lab2
                     unicValues.Remove(el);
                 }
             }
-        }
-        
+        }                             // 4
+        public void InsertThisListAfterX(T x)
+        {
+            var currentX = Head;
+            while(currentX != null)
+            {
+                if (currentX.Data.Equals(x))
+                    break;
+                currentX = currentX.Next;
+            }
+
+            var current1 = Head;
+            for (int i = 0; i < Length; i++)
+            {
+                currentX.Next = new ListItem<T>(current1.Data);
+                currentX.Next.Prev = currentX;
+
+                currentX = currentX.Next;
+                current1 = current1.Next;
+            }
+            //for (int i = 0; )
+        }// fix needed 5
+        public static MyList<T> InsertElementByOrder(MyList<T> list, T data)
+        {
+            var current = list.Head;
+            var element = new ListItem<T>(data);
+            while(current != null)
+            {
+                //if (Int32.Parse(current.Data) > element.Data)
+                    break;
+            }
+            return new MyList<T>();
+        }// 6
+        public void DeleteEveryX(T x)
+        {
+            var current = Head;
+            while(current != null)
+            {
+                if(current.Data.Equals(x))
+                {
+                    if(current.Prev != null)
+                    {
+                        current.Prev.Next = current.Next;
+                        if (current.Next == null)
+                            Tail = current.Prev;
+                    }
+                    if(current.Next != null)
+                    {
+                        current.Next.Prev = current.Prev;
+                        if (current.Prev == null)
+                            Head = current.Next;
+                    }
+                }
+
+                current = current.Next;
+            }
+        }                                       // 7
+        public void InsertXBeforeY(T x, T y)
+        {
+            var current = Head;
+            while(current != null)
+            {
+                if (current.Data.Equals(y))
+                {
+                    if (current.Prev == null)
+                    {
+                        AddFirst(x);
+                    }
+                    else
+                    {
+                        var item = new ListItem<T>(x);
+                        current.Prev.Next = item;
+                        current.Prev = item;
+
+                        item.Prev = current.Prev.Next;
+                        item.Next = current;
+                    }
+                }
+                current = current.Next;
+            }
+        }                                // 8
+        public void AddList(MyList<T> e)
+        {
+            var current1 = Tail;
+            var current2 = e.Head;
+
+            while(current2 != null)
+            {
+                if(current2.Next == null)
+                {
+                    Tail = current2;
+                }
+                current1.Next = current2;
+                current2.Prev = current1;
+
+                current1 = current1.Next;
+                current2 = current2.Next;
+            }
+            
+        }                                    // 9
+
+        public void InsertThisListToEnd()
+        {
+            var count = Length;
+            var current = Head;
+            while(count > 0)
+            {
+                Add(current.Data);
+                count--;
+                current = current.Next;
+            }
+        }                                   // 11
+        public void Swap(T x, T y)
+        {
+            if (!Contains(x) || !Contains(y))
+                return;
+
+            var current1 = Head;
+            var current2 = Head;
+
+            while(current1 != null)
+            {
+                if (current1.Data.Equals(x))
+                    break;
+            }
+            while (current2 != null)
+            {
+                if (current2.Data.Equals(y))
+                    break;
+            }
+
+            if (current1.Prev == null)
+                Head = current2;
+            else if (current1.Next == null)
+                Tail = current2;
+            if (current2.Prev == null)
+                Head = current1;
+            else if (current2.Next == null)
+                Tail = current1;
+
+            var temp = new ListItem<T>(current1.Data);
+            temp.Prev = current1.Prev;
+            temp.Next = current1.Next;
+
+            current1 = current2;
+
+            current2 = temp;
+        }//need fix
+
 
         public MyList<T> GetUnicValues()
         {
