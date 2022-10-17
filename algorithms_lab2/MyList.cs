@@ -294,7 +294,43 @@ namespace algorithms_lab2
             }
             
         }                                    // 9
+        public MyList<T>[] SplitByX(T x)
+        {
+            var current = Head;
+            while(current != null)
+            {
+                if (current.Data.Equals(x))
+                    break;
+                current = current.Next;
+            }
 
+            MyList<T> list2 = new MyList<T>();
+            MyList<T>[] twoLists = new MyList<T>[2];
+
+            if (current != null)
+            {
+                Tail = current.Prev;
+                Tail.Next = null;
+
+                while(current != null)
+                {
+                    list2.Add(current.Data);
+                    current = current.Next;
+                }
+                MyList<T> list1 = new MyList<T>();
+                var current1 = Head;
+                while(current1 != null)
+                {
+                    list1.Add(current1.Data);
+                    current1 = current1.Next;
+                }
+
+                twoLists[0] = list1;
+                twoLists[1] = list2;
+            }
+
+            return twoLists;
+        }                                       // 10
         public void InsertThisListToEnd()
         {
             var count = Length;
