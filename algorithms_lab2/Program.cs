@@ -5,8 +5,65 @@ public class Program
 {
     public static void Main(String[] args)
     {
-       Run9Task();
+        MyStack<string> s = new MyStack<string>();
+        for(int i = 0; i < 10; i++)
+        {
+            s.Push($"{i}");
+        }
+        s.Push("cat");
+        s.Print();
+
+        RunStackTask(s, "3 4 1,56 1,7 1,cat 2 5 4");
+       //Run9Task();
     }
+    private static void RunStackTask(MyStack<string> s, string data)
+    {
+        string temp;
+
+        using (StreamWriter sw = new StreamWriter("stack.txt", false))
+        {
+            sw.Write(data);
+        }
+        using(StreamReader sr = new StreamReader("stack.txt"))
+        {
+            temp = sr.ReadLine();
+        }
+
+        var arr = temp.Trim().Split(' ');
+
+        foreach(var el in arr)
+        {
+            CalculateOperation(s, el);
+        }
+    }
+
+    private static void CalculateOperation(MyStack<string> s, string operation)
+    {
+        if (operation.Contains(','))
+        {
+            var value = operation.Split(',')[1];
+            s.Push(value);
+        }
+        else
+        {
+            switch (operation)
+            {
+                case "2":
+                    s.Pop();
+                    break;
+                case "3":
+                    s.Top();
+                    break;
+                case "4":
+                    s.IsEmpty();
+                    break;
+                case "5":
+                    s.Print();
+                    break;
+            }
+        }
+    }
+
     private static void Run9Task()
     {
         string path = "9task.txt";
