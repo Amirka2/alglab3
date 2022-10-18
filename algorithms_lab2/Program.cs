@@ -5,25 +5,36 @@ public class Program
 {
     public static void Main(String[] args)
     {
-        int[] arr = { 1, 2, 3, 4, 5 };
-        MyList<int> l = new MyList<int>();
-        l.Add(1);
-        l.Add(2);
-        l.Add(3);
-        foreach(var e in l)
-            Console.WriteLine(e);
+       Run9Task();
+    }
+    private static void Run9Task()
+    {
+        string path = "9task.txt";
+        MyList<int> list1 = new MyList<int>();
+        MyList<int> list2 = new MyList<int>();
+        string temp, temp2;
+        using (StreamWriter sw = new StreamWriter(path, false))
+        {
+            sw.WriteLine("1, 2, 3, 4");
+            sw.WriteLine("5, 6, 7, 8");
+        }
+        using (StreamReader sr = new StreamReader(path))
+        {
+            temp = sr.ReadLine();
+            temp2 = sr.ReadLine();
+        }
+        var inputArr1 = temp.Replace(" ", String.Empty).Split(',');
+        var inputArr2 = temp2.Replace(" ", String.Empty).Split(',');
+        foreach (var el in inputArr1)
+            list1.Add(Int32.Parse(el));
+        foreach (var el in inputArr2)
+            list2.Add(Int32.Parse(el));
 
-        l.Remove(2);
+        list1.AddList(list2);
+
         Console.WriteLine();
-        foreach (var e in l)
-            Console.WriteLine(e);
 
-        l.AddFirst(0);
-        l.Add(4);
-        Console.WriteLine();
-        foreach (var e in l)
-            Console.WriteLine(e);
-
-        Console.ReadLine();
+        foreach (var el in list1)
+            Console.Write(el + ", ");
     }
 }

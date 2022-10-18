@@ -72,7 +72,6 @@ namespace algorithms_lab2
                 Head.Prev = el;
                 el.Next = Head;
             }
-            
             Head = el;
         }
         public void Remove(T data)
@@ -139,6 +138,296 @@ namespace algorithms_lab2
             Head = null;
             Tail = null;
             Length = 0;
+        }
+
+        //методы для лабы
+        public void Reverse()
+        {
+            MyList<T> newList = new MyList<T>();
+            ListItem<T> current1 = Tail;
+            ListItem<T> current2 = new ListItem<T>(current1.Data);
+
+            while(current1 != null)
+            {
+                newList.Add(current1.Data);
+                current1 = current1.Prev;
+            }
+        }                                               // 1
+        public void LastToHead()
+        {
+            var temp = Tail;
+            temp.ClearLinks();
+
+            Tail = Tail.Prev;
+            Tail.Next = null;
+
+            temp.Next = Head;
+            Head = temp;
+        }                                            // 2
+        public void FirstToTail()
+        {
+            var temp = Head;
+            temp.ClearLinks();
+
+            Head = Head.Next;
+            Head.Prev = null;
+
+            temp.Prev = Tail;
+            Tail = temp;
+        }                                           // 2
+        public int GetUnicValuesCount()
+        {
+            var unicValues = GetUnicValues();
+
+            return unicValues.Length;
+        }                                     // 3
+        public void DeleteSecondRepeatedValue()
+        {
+            var unicValues = GetUnicValues();
+            var current = Head;
+
+            foreach(var el in unicValues)
+            {
+                if (current.Data.Equals(el))
+                {
+                    Remove(current.Data);
+                    unicValues.Remove(el);
+                }
+            }
+        }                             // 4
+        public void InsertThisListAfterX(T x) // не вставляет первый элемент остатка
+        {
+            // поиск х в списке
+            var currentX = Head;
+            while(currentX != null)
+            {
+                if (currentX.Data.Equals(x))
+                    break;
+                currentX = currentX.Next;
+            }
+
+            if(currentX != null)
+            {
+                // временный список с начальными значениями
+                var tempList = new MyList<T>();
+                var current1 = Head;
+                while(current1 != null)
+                {
+                    tempList.Add(current1.Data);
+                    current1 = current1.Next;
+                }
+                // список значений после х
+                var rest = new MyList<T>();
+                var current2 = currentX.Next;
+                while(current2 != null)
+                {
+                    rest.Add(current2.Data);
+                    current2 = current2.Next;
+                }
+                // вставка самого себя
+                current1 = tempList.Head;
+                for (int i = tempList.Length; i > 0; i--)
+                {
+                    currentX.Next = new ListItem<T>(current1.Data);
+                    currentX.Next.Prev = currentX;
+
+                    currentX = currentX.Next;
+                    current1 = current1.Next;
+                }
+                // вставка остатка тут трабл
+                var current = rest.Head;
+                while(current != null)
+                {
+                    currentX.Next = current;
+                    current.Prev = currentX;
+
+                    if (current.Next == null)
+                        Tail = current;
+                    current = current.Next;
+                }
+            }
+        }// fix needed 5
+        public static MyList<T> InsertElementByOrder(MyList<T> list, T data)
+        {
+            var current = list.Head;
+            var result = new MyList<T>();
+            var element = new ListItem<T>(data);
+            while(current != null)
+            {
+                if(Int32.Parse(current.Data.ToString()) < Int32.Parse(data.ToString()))
+                {
+                    result.Add(current.Data);
+                    current = current.Next;
+                    continue;
+                }
+                result.Remove(current.Data);
+                current = current.Prev;         // элемент после которого вставляем х
+            }
+            //result.Add();
+            
+
+            return new MyList<T>();
+        }// 6
+        public void DeleteEveryX(T x)
+        {
+            var current = Head;
+            while(current != null)
+            {
+                if(current.Data.Equals(x))
+                {
+                    if(current.Prev != null)
+                    {
+                        current.Prev.Next = current.Next;
+                        if (current.Next == null)
+                            Tail = current.Prev;
+                    }
+                    if(current.Next != null)
+                    {
+                        current.Next.Prev = current.Prev;
+                        if (current.Prev == null)
+                            Head = current.Next;
+                    }
+                }
+
+                current = current.Next;
+            }
+        }                                       // 7
+        public void InsertXBeforeY(T x, T y)
+        {
+            var current = Head;
+            while(current != null)
+            {
+                if (current.Data.Equals(y))
+                {
+                    if (current.Prev == null)
+                    {
+                        AddFirst(x);
+                    }
+                    else
+                    {
+                        var item = new ListItem<T>(x);
+                        current.Prev.Next = item;
+                        current.Prev = item;
+
+                        item.Prev = current.Prev.Next;
+                        item.Next = current;
+                    }
+                }
+                current = current.Next;
+            }
+        }                                // 8
+        public void AddList(MyList<T> e)
+        {
+            var current1 = Tail;
+            var current2 = e.Head;
+
+            while(current2 != null)
+            {
+                if(current2.Next == null)
+                {
+                    Tail = current2;
+                }
+                current1.Next = current2;
+                current2.Prev = current1;
+
+                current1 = current1.Next;
+                current2 = current2.Next;
+            }
+            
+        }                                    // 9
+        public MyList<T>[] SplitByX(T x)
+        {
+            var current = Head;
+            while(current != null)
+            {
+                if (current.Data.Equals(x))
+                    break;
+                current = current.Next;
+            }
+
+            MyList<T> list2 = new MyList<T>();
+            MyList<T>[] twoLists = new MyList<T>[2];
+
+            if (current != null)
+            {
+                Tail = current.Prev;
+                Tail.Next = null;
+
+                while(current != null)
+                {
+                    list2.Add(current.Data);
+                    current = current.Next;
+                }
+                MyList<T> list1 = new MyList<T>();
+                var current1 = Head;
+                while(current1 != null)
+                {
+                    list1.Add(current1.Data);
+                    current1 = current1.Next;
+                }
+
+                twoLists[0] = list1;
+                twoLists[1] = list2;
+            }
+
+            return twoLists;
+        }                                       // 10
+        public void InsertThisListToEnd()
+        {
+            var count = Length;
+            var current = Head;
+            while(count > 0)
+            {
+                Add(current.Data);
+                count--;
+                current = current.Next;
+            }
+        }                                   // 11
+        public void Swap(T x, T y)
+        {
+            if (!Contains(x) || !Contains(y))
+                return;
+
+            var current1 = Head;
+            var current2 = Head;
+
+            while(current1 != null)
+            {
+                if (current1.Data.Equals(x))
+                    break;
+                current1 = current1.Next;
+            }
+            while (current2 != null)
+            {
+                if (current2.Data.Equals(y))
+                    break;
+                current2 = current2.Next;
+            }
+
+            var temp = current1.Data;
+            current1.Data = current2.Data;
+            current2.Data = temp;
+        }//need fix
+
+
+        public MyList<T> GetUnicValues()
+        {
+            var current = Head;
+            var unicValues = new MyList<T>();
+            unicValues.Add(current.Data);
+            current = current.Next;
+
+            while (current != null)
+            {
+                foreach (var e in unicValues)
+                {
+                    if (current.Data.Equals(e))
+                        break;
+                    else
+                        unicValues.Add(current.Data);
+                }
+            }
+            return unicValues;
         }
 
         public IEnumerator<T> GetEnumerator()
