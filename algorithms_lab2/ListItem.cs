@@ -3,7 +3,7 @@ namespace algorithms_lab2
 {
     public class ListItem<T>
     {
-        public T Data { get; private set; }
+        public T Data { get; set; }
         public ListItem<T> Next { get; set; }
         public ListItem<T> Prev { get; set; }
 
