@@ -195,8 +195,9 @@ namespace algorithms_lab2
                 }
             }
         }                             // 4
-        public void InsertThisListAfterX(T x)
+        public void InsertThisListAfterX(T x) // не вставляет первый элемент остатка
         {
+            // поиск х в списке
             var currentX = Head;
             while(currentX != null)
             {
@@ -205,26 +206,66 @@ namespace algorithms_lab2
                 currentX = currentX.Next;
             }
 
-            var current1 = Head;
-            for (int i = 0; i < Length; i++)
+            if(currentX != null)
             {
-                currentX.Next = new ListItem<T>(current1.Data);
-                currentX.Next.Prev = currentX;
+                // временный список с начальными значениями
+                var tempList = new MyList<T>();
+                var current1 = Head;
+                while(current1 != null)
+                {
+                    tempList.Add(current1.Data);
+                    current1 = current1.Next;
+                }
+                // список значений после х
+                var rest = new MyList<T>();
+                var current2 = currentX.Next;
+                while(current2 != null)
+                {
+                    rest.Add(current2.Data);
+                    current2 = current2.Next;
+                }
+                // вставка самого себя
+                current1 = tempList.Head;
+                for (int i = tempList.Length; i > 0; i--)
+                {
+                    currentX.Next = new ListItem<T>(current1.Data);
+                    currentX.Next.Prev = currentX;
 
-                currentX = currentX.Next;
-                current1 = current1.Next;
+                    currentX = currentX.Next;
+                    current1 = current1.Next;
+                }
+                // вставка остатка тут трабл
+                var current = rest.Head;
+                while(current != null)
+                {
+                    currentX.Next = current;
+                    current.Prev = currentX;
+
+                    if (current.Next == null)
+                        Tail = current;
+                    current = current.Next;
+                }
             }
-            //for (int i = 0; )
         }// fix needed 5
         public static MyList<T> InsertElementByOrder(MyList<T> list, T data)
         {
             var current = list.Head;
+            var result = new MyList<T>();
             var element = new ListItem<T>(data);
             while(current != null)
             {
-                //if (Int32.Parse(current.Data) > element.Data)
-                    break;
+                if(Int32.Parse(current.Data.ToString()) < Int32.Parse(data.ToString()))
+                {
+                    result.Add(current.Data);
+                    current = current.Next;
+                    continue;
+                }
+                result.Remove(current.Data);
+                current = current.Prev;         // элемент после которого вставляем х
             }
+            //result.Add();
+            
+
             return new MyList<T>();
         }// 6
         public void DeleteEveryX(T x)
@@ -354,29 +395,18 @@ namespace algorithms_lab2
             {
                 if (current1.Data.Equals(x))
                     break;
+                current1 = current1.Next;
             }
             while (current2 != null)
             {
                 if (current2.Data.Equals(y))
                     break;
+                current2 = current2.Next;
             }
 
-            if (current1.Prev == null)
-                Head = current2;
-            else if (current1.Next == null)
-                Tail = current2;
-            if (current2.Prev == null)
-                Head = current1;
-            else if (current2.Next == null)
-                Tail = current1;
-
-            var temp = new ListItem<T>(current1.Data);
-            temp.Prev = current1.Prev;
-            temp.Next = current1.Next;
-
-            current1 = current2;
-
-            current2 = temp;
+            var temp = current1.Data;
+            current1.Data = current2.Data;
+            current2.Data = temp;
         }//need fix
 
 
