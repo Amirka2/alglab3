@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Text;
 using algorithms_lab2;
 
 public class Program
@@ -10,11 +12,18 @@ public class Program
         {
             s.Push($"{i}");
         }
-        s.Push("cat");
-        s.Print();
 
-        RunStackTask(s, "3 4 1,56 1,7 1,cat 2 5 4");
-       //Run9Task();
+        StringBuilder data = new StringBuilder(" 3 1,7 2 5 4 ");
+        StringBuilder value = new StringBuilder("3 1,7 2 5 4 ");
+
+
+        //for(int i = 0; i < 10000; i++) замеры времени
+        //{
+        //    RunStackTask(s, data.ToString());
+        //    data.Append(value);
+        //}
+
+        //Run9Task(); список 9 задание
     }
     private static void RunStackTask(MyStack<string> s, string data)
     {
@@ -28,12 +37,13 @@ public class Program
         {
             temp = sr.ReadLine();
         }
-
         var arr = temp.Trim().Split(' ');
 
-        foreach(var el in arr)
+        long timeInMicroSeconds = MeasureTime(arr, s);
+
+        using(StreamWriter sw = new StreamWriter("stackMeasures.csv", true))
         {
-            CalculateOperation(s, el);
+            sw.WriteLine($"{arr.Length}; {timeInMicroSeconds}");
         }
     }
 
@@ -62,6 +72,21 @@ public class Program
                     break;
             }
         }
+    }
+    private static long MeasureTime(string[] arr, MyStack<string> s)
+    {
+        Stopwatch sw = new Stopwatch();
+        sw.Reset();
+        sw.Start();
+        foreach (var el in arr)
+        {
+            CalculateOperation(s, el);
+        }
+        sw.Stop();
+        var ticks = sw.ElapsedTicks;
+        var microSeconds = ticks / 10;
+
+        return microSeconds;
     }
 
     private static void Run9Task()
