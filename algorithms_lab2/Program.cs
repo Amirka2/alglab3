@@ -7,21 +7,22 @@ public class Program
 {
     public static void Main(String[] args)
     {
-        MyStack<string> s = new MyStack<string>();
-        for(int i = 0; i < 10; i++)
-        {
-            s.Push($"{i}");
-        }
+        //MyStack<string> s = new MyStack<string>();
+        //for(int i = 0; i < 10; i++)
+        //{
+        //    s.Push($"{i}");
+        //}
 
-        StringBuilder data = new StringBuilder(" 3 1,7 2 5 4 ");
-        StringBuilder value = new StringBuilder("3 1,7 2 5 4 ");
-
-
+        //StringBuilder data = new StringBuilder(" 3 1,7 2 5 4 ");
+        //StringBuilder value = new StringBuilder("3 1,7 2 5 4 ");
         //for(int i = 0; i < 10000; i++) замеры времени
         //{
         //    RunStackTask(s, data.ToString());
         //    data.Append(value);
         //}
+
+        string postfix = RPN.ConvertNotation("2 + 2 * 2");
+        Console.WriteLine("result = " + RPN.Counting(postfix));
 
         //Run9Task(); список 9 задание
     }
