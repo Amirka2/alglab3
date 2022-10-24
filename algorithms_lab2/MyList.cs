@@ -76,35 +76,30 @@ namespace algorithms_lab2
         }
         public void Remove(T data)
         {
-            if (Head == null) return;
-
-            ListItem<T> el = new ListItem<T>(data);
             ListItem<T> current = Head;
+            ListItem<T> previous = null;
 
-            while(current != null)
+            while (current != null)
             {
-                if(current.Data.Equals(data))
+                if (current.Data.Equals(data))
                 {
-                    break;
+                    if (previous != null)
+                    {
+                        previous.Next = current.Next;
+                        if (current.Next == null)
+                            Tail = previous;
+                    }
+                    else
+                    {
+                        Head = Head.Next;
+
+                        if (Head == null)
+                            Tail = null;
+                    }
+                    Length--;
                 }
+                previous = current;
                 current = current.Next;
-            }
-            if(current != null)
-            {
-                if(current.Prev == null)
-                {
-                    Head.Next.Prev = null;
-                    Head = Head.Next;
-                }
-
-                if(current.Next == null)
-                {
-                    Tail.Prev.Next = null;
-                    Tail = Tail.Prev;
-                }
-
-                current.Prev.Next = current.Next;
-                current.Next.Prev = current.Prev;
             }
         }
         public void RemoveAt(int index)
@@ -123,6 +118,20 @@ namespace algorithms_lab2
 
             Remove(current.Data);
         }
+        public void AddAt(int index, T data)
+        {
+            var current = Head;
+            var count = 0;
+
+            while(current != null)
+            {
+                if(count == index)
+                {
+                    
+                }
+                current = current.Next;
+            }
+        }
         public bool Contains(T data)
         {
             var current = new ListItem<T>(data);
@@ -139,24 +148,55 @@ namespace algorithms_lab2
             Tail = null;
             Length = 0;
         }
+        public void Print(int index)
+        {
+            var current = Head;
+            while (current != null)
+            {
+                if(index == 0)
+                {
+                    Console.WriteLine(current.Data);
+                }
+
+                index--;
+                current = current.Next;
+            }
+        }
+        public void Print()
+        {
+            var current = Head;
+            while (current != null)
+            {
+                if (current == Tail)
+                {
+                    Console.WriteLine(current.Data);
+                }
+                else
+                {
+                    Console.Write(current.Data + ", ");
+                }
+
+                current = current.Next;
+            }
+        }
 
         //методы для лабы
-        public void Reverse()
+        public MyList<T> Reverse()
         {
             MyList<T> newList = new MyList<T>();
             ListItem<T> current1 = Tail;
-            ListItem<T> current2 = new ListItem<T>(current1.Data);
 
             while(current1 != null)
             {
                 newList.Add(current1.Data);
                 current1 = current1.Prev;
             }
+
+            return newList;
         }                                               // 1
         public void LastToHead()
         {
             var temp = Tail;
-            temp.ClearLinks();
 
             Tail = Tail.Prev;
             Tail.Next = null;
@@ -167,13 +207,16 @@ namespace algorithms_lab2
         public void FirstToTail()
         {
             var temp = Head;
-            temp.ClearLinks();
 
             Head = Head.Next;
             Head.Prev = null;
 
-            temp.Prev = Tail;
+            var tempTail = Tail;
             Tail = temp;
+
+            tempTail.Next = temp;
+            temp.Prev = tempTail;
+            temp.Next = null;
         }                                           // 2
         public int GetUnicValuesCount()
         {
@@ -181,20 +224,45 @@ namespace algorithms_lab2
 
             return unicValues.Length;
         }                                     // 3
-        public void DeleteSecondRepeatedValue()
+        public bool RemoveDuplicateElement(T data) 
         {
-            var unicValues = GetUnicValues();
-            var current = Head;
+            bool flag = false; 
 
-            foreach(var el in unicValues)
+            ListItem<T> current = Head;
+            ListItem<T> previous = null;
+
+            while (current != null)
             {
-                if (current.Data.Equals(el))
+                if (current.Data.Equals(data) && flag)
                 {
-                    Remove(current.Data);
-                    unicValues.Remove(el);
+                    if (previous != null)
+                    {
+                        previous.Next = current.Next;
+
+                        if (current.Next == null)
+                            Tail = previous;
+                    }
+                    else
+                    {
+                        Head = Head.Next;
+
+                        if (Head == null)
+                            Tail = null;
+                    }
+                    Length--;
+                    return true;
                 }
+
+                if (current.Data.Equals(data) && !flag)
+                {
+                    flag = true;
+                }
+
+                previous = current;
+                current = current.Next;
             }
-        }                             // 4
+            return false;
+        }                        // 4
         public void InsertThisListAfterX(T x) 
         {
             ListItem<T> current = Head;
@@ -236,9 +304,6 @@ namespace algorithms_lab2
         }                             // 5
         public void InsertElementByOrder(T data)
         {
-            ListItem<T> current = Head;
-            ListItem<T> previous = null;
-
             if (Length == 1)
             {
                 if (Convert.ToInt32(Head.Data) < Convert.ToInt32(data))
@@ -258,6 +323,16 @@ namespace algorithms_lab2
                 return;
             }
 
+            if (Convert.ToInt32(Tail.Data) < Convert.ToInt32(data))
+            {
+                Add(data);
+                return;
+            }
+
+
+            ListItem<T> current = Head.Next;
+            ListItem<T> previous = Head;
+
             while (current != null)
             {
                 if (Convert.ToInt32(current.Data) > Convert.ToInt32(data) && Convert.ToInt32(previous.Data) < Convert.ToInt32(data))
@@ -265,11 +340,13 @@ namespace algorithms_lab2
                     ListItem<T> node = new ListItem<T>(data);
                     node.Next = current;
                     previous.Next = node;
+                    Length++;
                     return;
                 }
 
                 previous = current;
                 current = current.Next;
+
             }
         }
         public void DeleteEveryX(T x)
@@ -291,6 +368,7 @@ namespace algorithms_lab2
                         if (current.Prev == null)
                             Head = current.Next;
                     }
+                    Length--;
                 }
 
                 current = current.Next;
@@ -316,6 +394,7 @@ namespace algorithms_lab2
                         item.Prev = current.Prev.Next;
                         item.Next = current;
                     }
+                    Length++;
                 }
                 current = current.Next;
             }
@@ -336,11 +415,26 @@ namespace algorithms_lab2
 
                 current1 = current1.Next;
                 current2 = current2.Next;
+
+                Length++;
             }
             
         }                                    // 9
         public MyList<T>[] SplitByX(T x)
         {
+            if(Head.Data.Equals(x))
+            {
+                MyList<T>[] res = new MyList<T>[1];
+                MyList<T> l = new MyList<T>();
+                var cur = Head;
+                while(cur != null)
+                {
+                    l.Add(cur.Data);
+                    cur = cur.Next;
+                }
+                res[0] = l;
+                return res;
+            }
             var current = Head;
             while(current != null)
             {
@@ -352,7 +446,8 @@ namespace algorithms_lab2
             MyList<T> list2 = new MyList<T>();
             MyList<T>[] twoLists = new MyList<T>[2];
 
-            if (current != null)
+
+            if (current != null && current.Prev != null)
             {
                 Tail = current.Prev;
                 Tail.Next = null;
@@ -411,7 +506,7 @@ namespace algorithms_lab2
             var temp = current1.Data;
             current1.Data = current2.Data;
             current2.Data = temp;
-        }//need fix
+        }
 
 
         public MyList<T> GetUnicValues()
@@ -419,17 +514,22 @@ namespace algorithms_lab2
             var current = Head;
             var unicValues = new MyList<T>();
             unicValues.Add(current.Data);
-            current = current.Next;
+            
 
             while (current != null)
             {
+                bool flag = false;
+
                 foreach (var e in unicValues)
                 {
                     if (current.Data.Equals(e))
-                        break;
-                    else
-                        unicValues.Add(current.Data);
+                        flag = !flag;
                 }
+
+                if (!flag)
+                    unicValues.Add(current.Data);
+
+                current = current.Next;
             }
             return unicValues;
         }
