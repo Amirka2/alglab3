@@ -7,7 +7,12 @@ public class Program
 {
     public static void Main(String[] args)
     {
-        RunListTasks();
+        string[] s = { "2", "+", "2", "*", "2" };
+        Console.WriteLine(RPN.ConvertNotation(s));
+        Console.WriteLine(RPN.Calculate("2 + 2 * 2 - (30 + 6)"));
+
+
+        //RunListTasks();
     }
     private static void CreateStackData()
     {
@@ -24,9 +29,6 @@ public class Program
             RunStackTask(s, data.ToString());
             data.Append(value);
         }
-
-        string postfix = RPN.ConvertNotation("2 + 2 * 2");
-        Console.WriteLine("result = " + RPN.Counting(postfix));
     }//stackTask
     private static void RunStackTask(MyStack<string> s, string data)
     {
