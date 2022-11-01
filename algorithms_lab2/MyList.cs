@@ -534,6 +534,21 @@ namespace algorithms_lab2
             return unicValues;
         }
 
+        public void Subctract(MyList<T> B)
+        {
+            foreach (var bEl in B)
+            {
+                var current = Head;
+                while (current != null)
+                {
+                    if (current.Data.Equals(bEl))
+                        Remove(current.Data);
+
+                    current = current.Next;
+                }
+            }
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             ListItem<T> current = Head;
