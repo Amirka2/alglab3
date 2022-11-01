@@ -6,29 +6,8 @@ namespace algorithms_lab2
 {
     public class Checker
     {
-        public void MemoryChecking(string fileName, string path)
-        {
-            List<string> list = new List<string>();
-            StringBuilder sb = new StringBuilder();
-            Stopwatch sw = Stopwatch.StartNew();
-            string[] file = FileRead(path);
-
-            for (int i = 0; i < file.Length; i += 10)
-            {
-                WorkForQueue(new ArraySegment<string>(file, 1, i));
-                sb.Append($"{i};{(Process.GetCurrentProcess().WorkingSet64)}");
-                list.Add(sb.ToString());
-                sb.Clear();
-            }
-
-            File.WriteAllLines($"{fileName}.csv", list);
-        }
-
-        public string[] FileRead(string path)
-        {
-            return File.ReadAllText(path).Split(" ");
-        }
-
+        private const int N = 100000;
+        
         public static void CreateStackData()
         {
             MyStack<string> s = new MyStack<string>();
@@ -37,9 +16,9 @@ namespace algorithms_lab2
                 s.Push($"{i}");
             }
 
-            StringBuilder data = new StringBuilder(" 3 1,7 2 5 4 ");
-            StringBuilder value = new StringBuilder("3 1,7 2 5 4 ");
-            for (int i = 0; i < 10000; i++)
+            StringBuilder data = new StringBuilder(" 1,7 3 2 4 5 ");
+            StringBuilder value = new StringBuilder("1,7 3 2 4 5 ");
+            for (int i = 0; i < N; i++)
             {
                 RunStackTask(s, data.ToString());
                 data.Append(value);
@@ -57,16 +36,21 @@ namespace algorithms_lab2
             {
                 temp = sr.ReadLine();
             }
-            var arr = temp.Trim().Split(' ');
+            var operations = temp.Trim().Split(' ');
+            long memory;
+            long timeInMicroSeconds = MeasureTime(operations, out memory, s);
 
-            long timeInMicroSeconds = MeasureTime(arr, s);
-
-            using (StreamWriter sw = new StreamWriter("stackMeasures.csv", true))
+            using (StreamWriter sw = new StreamWriter("stackTimeMeasures.csv", true))
             {
-                sw.WriteLine($"{arr.Length}; {timeInMicroSeconds}");
+                sw.WriteLine($"{operations.Length}; {timeInMicroSeconds}");
             }
+            using (StreamWriter sw = new StreamWriter("stackMemoryMeasures.csv", true))
+            {
+                sw.WriteLine($"{operations.Length}; {memory}");
+            }
+
         }
-        private static long MeasureTime(string[] arr, MyStack<string> s)
+        private static long MeasureTime(string[] arr, out long memory, MyStack<string> s)
         {
             Stopwatch sw = new Stopwatch();
             sw.Reset();
@@ -78,6 +62,7 @@ namespace algorithms_lab2
             sw.Stop();
             var ticks = sw.ElapsedTicks;
             var microSeconds = ticks / 10;
+            memory = Process.GetCurrentProcess().WorkingSet64;
 
             return microSeconds;
         }
@@ -118,9 +103,9 @@ namespace algorithms_lab2
                 q.Enqueue($"{i}");
             }
 
-            StringBuilder data = new StringBuilder(" 3 1,7 2 5 4 ");
-            StringBuilder value = new StringBuilder("3 1,7 2 5 4 ");
-            for (int i = 0; i < 10000; i++)
+            StringBuilder data = new StringBuilder(" 1,7 3 2 4 5 ");
+            StringBuilder value = new StringBuilder("1,7 3 2 4 5 ");
+            for (int i = 0; i < N; i++)
             {
                 RunQueueTask(q, data.ToString());
                 data.Append(value);
@@ -138,16 +123,20 @@ namespace algorithms_lab2
             {
                 temp = sr.ReadLine();
             }
-            var arr = temp.Trim().Split(' ');
+            var operations = temp.Trim().Split(' ');
+            long memory;
+            long timeInMicroSeconds = MeasureTime(operations, out memory, q);
 
-            long timeInMicroSeconds = MeasureTime(arr, q);
-
-            using (StreamWriter sw = new StreamWriter("queueMeasures.csv", true))
+            using (StreamWriter sw = new StreamWriter("queueTimeMeasures.csv", true))
             {
-                sw.WriteLine($"{arr.Length}; {timeInMicroSeconds}");
+                sw.WriteLine($"{operations.Length}; {timeInMicroSeconds}");
+            }
+            using (StreamWriter sw = new StreamWriter("queueMemoryMeasures.csv", true))
+            {
+                sw.WriteLine($"{operations.Length}; {memory}");
             }
         }
-        private static long MeasureTime(string[] arr, MyQueue<string> q)
+        private static long MeasureTime(string[] arr, out long memory, MyQueue<string> q)
         {
             Stopwatch sw = new Stopwatch();
             sw.Reset();
@@ -159,6 +148,7 @@ namespace algorithms_lab2
             sw.Stop();
             var ticks = sw.ElapsedTicks;
             var microSeconds = ticks / 10;
+            memory = Process.GetCurrentProcess().WorkingSet64;
 
             return microSeconds;
         }

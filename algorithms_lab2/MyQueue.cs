@@ -29,10 +29,8 @@ namespace algorithms_lab2
         {
             if (head == null)
             {
-                Console.WriteLine("\nQueue Underflow");
                 return default(T);
             }
-            Console.WriteLine($"Removing {head.Data}");
             var temp = head.Data;
             head = head.Next;
             if (head == null) tail = null;
@@ -50,7 +48,6 @@ namespace algorithms_lab2
         public void Enqueue(T item)
         {
             ListItem<T> node = new ListItem<T>(item);
-            Console.WriteLine($"Adding {item}");
             if (head == null)
             {
                 head = node;
