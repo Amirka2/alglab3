@@ -58,6 +58,20 @@ namespace algorithms_lab2
             Console.WriteLine();
         }
 
+        public MyList<T> ToList()
+        {
+            MyList<T> list = new MyList<T>();
+            var current = Head;
+            while (current != null)
+            {
+                list.Add(current.Data);
+
+                current = current.Next;
+            }
+
+            return list;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return ((IEnumerable<T>)this).GetEnumerator();
