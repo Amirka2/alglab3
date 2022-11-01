@@ -9,39 +9,39 @@ namespace algorithms_lab2
         private ListItem<T> Tail;
         public int Length { get; private set; }
 
-        public MyList(params T[] list)
-        {
-            Length = list.Length;
-            if(list.Length > 2)
-            {
-                Head = new ListItem<T>(list[0]);
-                ListItem<T> temp = new ListItem<T>(list[1]);
+        //public MyList(params T[] list)
+        //{
+        //    Length = list.Length;
+        //    if(list.Length > 2)
+        //    {
+        //        Head = new ListItem<T>(list[0]);
+        //        ListItem<T> temp = new ListItem<T>(list[1]);
                 
-                temp.Prev = Head;
-                Head.Next = temp;
+        //        temp.Prev = Head;
+        //        Head.Next = temp;
 
-                for (int i = 2; i < list.Length; i++)
-                {
-                    ListItem<T> item = new ListItem<T>(list[i]);
-                    item.Prev = temp;
-                    temp.Next = item;
-                    temp = item;
-                }
-                Tail = temp;
-            }
-            else if(list.Length == 2)
-            {
-                Head = new ListItem<T>(list[0]);
-                Tail = new ListItem<T>(list[1]);
-                Head.Next = Tail;
-                Tail.Prev = Head;
-            }
-            else
-            {
-                Head = new ListItem<T>(list[0]);
-                Tail = Head;
-            }
-        }
+        //        for (int i = 2; i < list.Length; i++)
+        //        {
+        //            ListItem<T> item = new ListItem<T>(list[i]);
+        //            item.Prev = temp;
+        //            temp.Next = item;
+        //            temp = item;
+        //        }
+        //        Tail = temp;
+        //    }
+        //    else if(list.Length == 2)
+        //    {
+        //        Head = new ListItem<T>(list[0]);
+        //        Tail = new ListItem<T>(list[1]);
+        //        Head.Next = Tail;
+        //        Tail.Prev = Head;
+        //    }
+        //    else
+        //    {
+        //        Head = new ListItem<T>(list[0]);
+        //        Tail = Head;
+        //    }
+        //}
 
         public MyList()
         {
@@ -193,7 +193,7 @@ namespace algorithms_lab2
             }
 
             return newList;
-        }                                               // 1
+        }                                          // 1
         public void LastToHead()
         {
             var temp = Tail;
@@ -262,7 +262,7 @@ namespace algorithms_lab2
                 current = current.Next;
             }
             return false;
-        }                        // 4
+        }                         // 4
         public void InsertThisListAfterX(T x) 
         {
             ListItem<T> current = Head;
@@ -301,7 +301,7 @@ namespace algorithms_lab2
                 }
                 current = current.Next;
             }
-        }                             // 5
+        }                              // 5
         public void InsertElementByOrder(T data)
         {
             if (Length == 1)
@@ -348,7 +348,7 @@ namespace algorithms_lab2
                 current = current.Next;
 
             }
-        }
+        }                            // 6
         public void DeleteEveryX(T x)
         {
             var current = Head;
@@ -470,7 +470,7 @@ namespace algorithms_lab2
             }
 
             return twoLists;
-        }                                       // 10
+        }                                    // 10
         public void InsertThisListToEnd()
         {
             var count = Length;
@@ -506,7 +506,7 @@ namespace algorithms_lab2
             var temp = current1.Data;
             current1.Data = current2.Data;
             current2.Data = temp;
-        }
+        }                                          // 12
 
 
         public MyList<T> GetUnicValues()
@@ -547,7 +547,7 @@ namespace algorithms_lab2
                     current = current.Next;
                 }
             }
-        }
+        }                                  // method for task3
 
         public IEnumerator<T> GetEnumerator()
         {
