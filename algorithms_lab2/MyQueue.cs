@@ -44,7 +44,7 @@ namespace algorithms_lab2
         public void Show()
         {
             for (ListItem<T> node = head; node != null; node = node.Next)
-                Console.WriteLine(node.Data);
+                Console.Write(node.Data + ", ");
         }
 
         public void Enqueue(T item)
