@@ -7,18 +7,22 @@ public class Program
 {
     public static void Main(String[] args)
     {
-        //string[] s = { "2", "+", "2", "*", "2" }; //RPN
-        //Console.WriteLine(RPN.ConvertNotation(s));
-        //Console.WriteLine(RPN.Calculate("2 + 2 * 2 - ( 30 + 6 )"));
+        string[] s = { "2", "+", "2", "*", "2" }; //RPN
+        Console.WriteLine(RPN.ConvertNotation(s));
 
-        ListWorker.RunListTasks();  //12tasks
+        Console.WriteLine(RPN.Calculate("2 + 2 * 2"));
+        Console.WriteLine(RPN.Calculate("( 2 + 2 ) * 2"));
+        Console.WriteLine(RPN.Calculate("cos ( 15 )"));
+        Console.WriteLine(RPN.Calculate("2 ^ 3 + 2"));
 
-        ListWorker.RunListTask();   //realization of using
+        //ListWorker.RunListTasks();  //12tasks
 
-        Checker.CreateStackData();  //creates files with n operations and time data for stack
+        //ListWorker.RunListTask();   //realization of using
 
-        Checker.CreateQueueData();  //creates files with n operations and time data for queue
-                
+        //Checker.CreateStackData();  //creates files with n operations and time data for stack
+
+        //Checker.CreateQueueData();  //creates files with n operations and time data for queue
+
     }
     
 
